@@ -2,7 +2,11 @@ const express = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const io = require('socket.io')(8080, {
+const http = require('http');
+const socketIo = require('socket.io');
+const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server, {
     cors: {
         origin: '*',
     }
@@ -17,7 +21,7 @@ const Conversations = require('./models/Conversations');
 const Messages = require('./models/Messages');
 
 // app Use
-const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
@@ -72,12 +76,6 @@ io.on('connection', socket => {
 app.get('/', (req, res) => {
     res.send('Welcome');
 })
-app.get('/socket.io/socket.io.js', (req, res) => {
-  res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
-});
-app.get('/socket.io', (req, res) => {
-  res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
-});
 
 app.post('/api/register', async (req, res, next) => {
     try {
@@ -229,6 +227,6 @@ app.get('/api/users/:userId', async (req, res) => {
     }
 })
 
-app.listen(port, () => {
-    console.log('listening on port ' + port);
+server.listen(port, () => {
+    console.log('Server and Socket.IO are running on port : ' + port);
 })
