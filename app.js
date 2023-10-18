@@ -75,6 +75,9 @@ app.get('/', (req, res) => {
 app.get('/socket.io/socket.io.js', (req, res) => {
   res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
 });
+app.get('/socket.io', (req, res) => {
+  res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
+});
 
 app.post('/api/register', async (req, res, next) => {
     try {
